@@ -8,6 +8,7 @@
 #define STRUCTURE_TOPIC_COMMAND "/command"
 
 #include <stdlib.h>
-#include "StructureDevice.h";
+#include "StructureDevice.h"
+#include "StructureCommand.h"
 
 #endif /* STRUCTURE_H_ */

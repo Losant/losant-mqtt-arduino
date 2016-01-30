@@ -6,24 +6,25 @@
 #include <ArduinoJson.h>
 #include "Client.h"
 #include "Structure.h"
+#include "StructureCommand.h"
 
-typedef void (*CommandCallback)(JsonObject&);
+typedef void (*CommandCallback)(StructureCommand*);
 
 class StructureDevice {
 	public:
-		StructureDevice(char* id);
+		StructureDevice(const char* id);
 		void connect(Client& client, const char* key, const char* secret);
 		void disconnect();
 		boolean loop();
 		void sendState(JsonObject& state);
 		void onCommand(CommandCallback);
-		char* getId();
+		const char* getId();
 		boolean connected();
 		String stateTopic;
 		String commandTopic;
 		static CommandCallback commandCallback;
 	private:
-		char* id;
+		const char* id;
 		PubSubClient mqttClient;
 };
 

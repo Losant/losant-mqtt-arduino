@@ -1,13 +1,25 @@
-#include "Structure.h"
+#include "StructureDevice.h"
+
+CommandCallback StructureDevice::commandCallback = NULL;
 
 void commandReceived(char* topic, byte* payload, unsigned int length) {
+
+  StructureCommand command;
   DynamicJsonBuffer jsonBuffer;
-  JsonObject& command = jsonBuffer.parseObject((char*) payload);
-  command.printTo(Serial);
-  // StructureDevice::commandCallback(command);
+  JsonObject& root = jsonBuffer.parseObject((char*)payload);
+
+  if(root.success()) {
+    root.printTo(Serial);
+
+    command.name = root["name"];
+    command.time = root["$time"];
+    command.payload = &(root["payload"].asObject());
+
+    StructureDevice::commandCallback(&command);
+  }
 }
 
-StructureDevice::StructureDevice(char* id) {
+StructureDevice::StructureDevice(const char* id) {
   this->id = id;
   stateTopic = String(STRUCTURE_TOPIC_PREFIX);
   stateTopic.concat(id);
@@ -17,12 +29,12 @@ StructureDevice::StructureDevice(char* id) {
   commandTopic.concat(STRUCTURE_TOPIC_COMMAND);
 }
 
-char* StructureDevice::getId() {
+const char* StructureDevice::getId() {
   return id;
 }
 
 void StructureDevice::onCommand(CommandCallback callback) {
-  // commandCallback = callback;
+  StructureDevice::commandCallback = callback;
 }
 
 void StructureDevice::connect(Client& client, const char* key, const char* secret) {
