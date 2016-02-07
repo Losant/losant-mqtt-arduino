@@ -22,7 +22,7 @@ The Structure Arduino SDK depends on [ArduinoJson](https://github.com/bblanchon/
 
 ## Example
 
-Below is a basic example of using the Structure Arduino SDK. For specific examples for various boards, please refer to the `examples` folder.
+Below is a basic example of using the Structure Arduino SDK. For specific examples for various boards, please refer to the [`examples`](https://github.com/GetStructure/structure-sdk-arduino/tree/master/examples) folder.
 
 ```arduino
 #include <WiFi101.h>
