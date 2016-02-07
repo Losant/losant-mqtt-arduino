@@ -1,7 +1,7 @@
 Structure Arduino SDK
 ============
 
-The Structure Arduino SDK provide a simple way for your Arduino-based things to connect and communicate with the Structure IoT platform.
+The Structure Arduino SDK provides a simple way for your Arduino-based things to connect and communicate with the Structure IoT platform.
 
 ## Installation
 The Structure Arduino SDK is distributed as an Arduino library. It can be installed in two ways:
@@ -160,7 +160,7 @@ The StructureDevice class represents a single connection to the Structure platfo
 
 <a name="structuredevice-structuredevice"></a>
 ### StructureDevice::StructureDevice(const char\* id)
-Structure device constructor. The only parameter is the device ID. A Structure device ID can be obtained by registering your device using your Structure dashboard.
+Structure device constructor. The only parameter is the device ID. A Structure device ID can be obtained by registering your device using the Structure dashboard.
 
 ```
 StructureDevice device('my-device-id');
@@ -168,7 +168,7 @@ StructureDevice device('my-device-id');
 
 <a name="structuredevice-connect"></a>
 ### StructureDevice::connect(Client& client, const char\* key, const char\* secret)
-Connects unsecured to the Structure platform.
+Creates an unsecured connection to the Structure platform.
 
 ```
 WiFiClient client;
@@ -181,7 +181,7 @@ device.connect(client, 'my-access-key', 'my-access-secret');
 
 <a name="structuredevice-connectsecure"></a>
 ### StructureDevice::connectSecure(Client& client, const char\* key, const char\* secret)
-Connects securely using TLS encryption to the Structure platform.
+Creates a TLS encrypted connection to the Structure platform.
 
 ```
 WiFiSSLClient client;
