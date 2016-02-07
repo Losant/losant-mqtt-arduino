@@ -9,8 +9,6 @@ void commandReceived(char* topic, byte* payload, unsigned int length) {
   JsonObject& root = jsonBuffer.parseObject((char*)payload);
 
   if(root.success()) {
-    root.printTo(Serial);
-
     command.name = root["name"];
     command.time = root["$time"];
     command.payload = &(root["payload"].asObject());
@@ -38,14 +36,22 @@ void StructureDevice::onCommand(CommandCallback callback) {
 }
 
 void StructureDevice::connect(Client& client, const char* key, const char* secret) {
-  mqttClient.setClient(client);
-  mqttClient.setServer(STRUCTURE_BROKER, STRUCTURE_PORT);
-  mqttClient.connect(id, key, secret);
-  mqttClient.setCallback(commandReceived);
-  int topicLen = commandTopic.length() + 1;
-  char topicBuf[topicLen];
-  commandTopic.toCharArray(topicBuf, topicLen);
-  mqttClient.subscribe(topicBuf);
+  this->connect(client, key, secret, STRUCTURE_BROKER, STRUCTURE_PORT);
+}
+
+void StructureDevice::connectSecure(Client& client, const char* key, const char* secret) {
+  this->connect(client, key, secret, STRUCTURE_BROKER, STRUCTURE_PORT_SECURE);
+}
+
+void StructureDevice::connect(Client &client, const char* key, const char* secret, const char *brokerUrl, int brokerPort) {
+    mqttClient.setClient(client);
+    mqttClient.setServer(brokerUrl, brokerPort);
+    mqttClient.connect(id, key, secret);
+    mqttClient.setCallback(commandReceived);
+    int topicLen = commandTopic.length() + 1;
+    char topicBuf[topicLen];
+    commandTopic.toCharArray(topicBuf, topicLen);
+    mqttClient.subscribe(topicBuf);
 }
 
 void StructureDevice::disconnect() {
@@ -61,13 +67,15 @@ boolean StructureDevice::loop() {
 }
 
 void StructureDevice::sendState(JsonObject& state) {
-  int topicLen = stateTopic.length() + 1;
-  char topicBuf[topicLen];
-  stateTopic.toCharArray(topicBuf, topicLen);
-  int stateLen = state.measureLength() + 1;
-  char stateBuf[stateLen];
-  state.printTo(stateBuf, stateLen);
-  state.printTo(Serial);
-  Serial.println(topicBuf);
-  mqttClient.publish(topicBuf, stateBuf);
+
+  // Create a wrapper object and add provided state to "data" property.
+  StaticJsonBuffer<100> jsonBuffer;
+  JsonObject& root = jsonBuffer.createObject();
+  root["data"] = state;
+
+  // Convert to string to send over mqtt.
+  String stateStr;
+  root.printTo(stateStr);
+
+  mqttClient.publish(this->stateTopic.c_str(), stateStr.c_str());
 }

@@ -14,6 +14,7 @@ class StructureDevice {
 	public:
 		StructureDevice(const char* id);
 		void connect(Client& client, const char* key, const char* secret);
+		void connectSecure(Client &client, const char* key, const char* secret);
 		void disconnect();
 		boolean loop();
 		void sendState(JsonObject& state);
@@ -23,9 +24,11 @@ class StructureDevice {
 		String stateTopic;
 		String commandTopic;
 		static CommandCallback commandCallback;
+		PubSubClient mqttClient;
 	private:
 		const char* id;
-		PubSubClient mqttClient;
+		void connect(Client &client, const char* key,
+			const char* secret, const char *brokerUrl, int brokerPort);
 };
 
 #endif /* STRUCTURE_DEVICE_H_ */
