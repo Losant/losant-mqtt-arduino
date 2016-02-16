@@ -19,9 +19,9 @@ const char* WIFI_SSID = "my-wifi-ssid";
 const char* WIFI_PASS = "my-wifi-pass";
 
 // Structure credentials.
-const char* DEVICE_ID = "my-device-id";
-const char* ACCESS_KEY = "my-app-key";
-const char* ACCESS_SECRET = "my-app-secret";
+const char* STRUCTURE_DEVICE_ID = "my-device-id";
+const char* STRUCTURE_ACCESS_KEY = "my-app-key";
+const char* STRUCTURE_ACCESS_SECRET = "my-app-secret";
 
 const int BUTTON_PIN = 14;
 const int LED_PIN = 12;
@@ -33,7 +33,7 @@ WiFiClientSecure wifiClient;
 // For an unsecure connection to Structure.
 // WiFiClient wifiClient;
 
-StructureDevice device(DEVICE_ID);
+StructureDevice device(STRUCTURE_DEVICE_ID);
 
 void toggle() {
   Serial.println("Toggling LED.");
@@ -75,7 +75,7 @@ void connect() {
   Serial.println();
   Serial.print("Connecting to Structure...");
 
-  device.connectSecure(wifiClient, ACCESS_KEY, ACCESS_SECRET);
+  device.connectSecure(wifiClient, STRUCTURE_ACCESS_KEY, STRUCTURE_ACCESS_SECRET);
 
   // For an unsecure connection.
   // device.connect(wifiClient, ACCESS_KEY, ACCESS_SECRET);
@@ -90,7 +90,7 @@ void connect() {
 
 void setup() {
   Serial.begin(115200);
-  delay(100);
+  while(!Serial) { }
   pinMode(BUTTON_PIN, INPUT);
   pinMode(LED_PIN, OUTPUT);
 
