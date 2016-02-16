@@ -12,7 +12,7 @@ The Structure Arduino SDK is distributed as an Arduino library. It can be instal
 
 Once installed, using the library requires a single include directive.
 
-```
+```arduino
 #include <Structure.h>
 ```
 
@@ -22,9 +22,9 @@ The Structure Arduino SDK depends on [ArduinoJson](https://github.com/bblanchon/
 
 ## Example
 
-Below is a basic example of using the Structure Arduino SDK. For specific examples for various boards, please refer to the `examples` folder.
+Below is a basic example of using the Structure Arduino SDK. For specific examples for various boards, please refer to the [`examples`](https://github.com/GetStructure/structure-sdk-arduino/tree/master/examples) folder.
 
-```
+```arduino
 #include <WiFi101.h>
 #include <Structure.h>
 
@@ -162,7 +162,7 @@ The StructureDevice class represents a single connection to the Structure platfo
 ### StructureDevice::StructureDevice(const char\* id)
 Structure device constructor. The only parameter is the device ID. A Structure device ID can be obtained by registering your device using the Structure dashboard.
 
-```
+```arduino
 StructureDevice device('my-device-id');
 ```
 
@@ -170,7 +170,7 @@ StructureDevice device('my-device-id');
 ### StructureDevice::connect(Client& client, const char\* key, const char\* secret)
 Creates an unsecured connection to the Structure platform.
 
-```
+```arduino
 WiFiClient client;
 
 ...
@@ -183,7 +183,7 @@ device.connect(client, 'my-access-key', 'my-access-secret');
 ### StructureDevice::connectSecure(Client& client, const char\* key, const char\* secret)
 Creates a TLS encrypted connection to the Structure platform.
 
-```
+```arduino
 WiFiSSLClient client;
 
 ...
@@ -196,7 +196,7 @@ device.connectSecure(client, 'my-access-key', 'my-access-secret');
 ### StructureDevice::onCommand(CommandCallback callback)
 Registers a function that will be called whenever a command is received from the Structure platform.
 
-```
+```arduino
 void handleCommand(StructureCommand *command) {
   Serial.print("Command received: ");
   Serial.println(command->name);
@@ -215,7 +215,7 @@ The command callback function is passed a `StructureCommand` object with details
 ### StructureDevice::sendState(JsonObject& state)
 Sends a state update to Structure. The state of an object is defined as a simple Json object with keys and values. Refer to the [ArduinoJson](https://github.com/bblanchon/ArduinoJson) library for detailed documentation.
 
-```
+```arduino
 StaticJsonBuffer<100> jsonBuffer;
 JsonObject& state = jsonBuffer.createObject();
 state["temperature"] = 72;
