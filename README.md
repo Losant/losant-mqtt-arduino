@@ -1,7 +1,7 @@
 Structure Arduino SDK
 ============
 
-The Structure Arduino SDK provides a simple way for your Arduino-based things to connect and communicate with the Structure IoT platform.
+The Structure Arduino SDK provides a simple way for your Arduino-based things to connect and communicate with the [Structure IoT developer platform](https://getstructure.io).
 
 ## Installation
 The Structure Arduino SDK is distributed as an Arduino library. It can be installed in two ways:
