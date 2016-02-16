@@ -33,9 +33,9 @@ const char* WIFI_SSID = "WIFI_SSID";
 const char* WIFI_PASS = "WIFI_PASS";
 
 // Structure credentials.
-const char* DEVICE_ID = "my-device-id";
-const char* ACCESS_KEY = "my-app-key";
-const char* ACCESS_SECRET = "my-app-secret";
+const char* STRUCTURE_DEVICE_ID = "my-device-id";
+const char* STRUCTURE_ACCESS_KEY = "my-app-key";
+const char* STRUCTURE_ACCESS_SECRET = "my-app-secret";
 
 const int BUTTON_PIN = 14;
 const int LED_PIN = 12;
@@ -44,7 +44,7 @@ bool ledState = false;
 
 WiFiSSLClient wifiClient;
 
-StructureDevice device(DEVICE_ID);
+StructureDevice device(STRUCTURE_DEVICE_ID);
 
 // Toggles and LED on or off.
 void toggle() {
@@ -73,7 +73,7 @@ void connect() {
   }
 
   // Connect to Structure.
-  device.connectSecure(wifiClient, ACCESS_KEY, ACCESS_SECRET);
+  device.connectSecure(wifiClient, STRUCTURE_ACCESS_KEY, STRUCTURE_ACCESS_SECRET);
 
   while(!device.connected()) {
     delay(500);
