@@ -153,6 +153,7 @@ Commands allow you to control your device remotely. What commands a device suppo
   * [`StructureDevice::connectSecure()`](#structuredevice-connectsecure)
   * [`StructureDevice::onCommand()`](#structuredevice-oncommand)
   * [`StructureDevice::sendState()`](#structuredevice-sendstate)
+  * [`StructureDevice::loop()`](#structuredevice-loop)
 
 <a name="structuredevice"></a>
 ## StructureDevice
@@ -222,4 +223,11 @@ state["temperature"] = 72;
 
 // Send the state to Structure.
 device.sendState(state);
+```
+<a name="structuredevice-loop"></a>
+### StructureDevice::loop()
+Loops the underlying Client to perform any required MQTT communication. Must be called periodically, no less than once every few seconds.
+
+```arduino
+device.loop();
 ```
