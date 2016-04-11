@@ -1,18 +1,18 @@
 
-#ifndef STRUCTURE_DEVICE_H_
-#define STRUCTURE_DEVICE_H_
+#ifndef LOSANT_DEVICE_H_
+#define LOSANT_DEVICE_H_
 
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 #include "Client.h"
-#include "Structure.h"
-#include "StructureCommand.h"
+#include "Losant.h"
+#include "LosantCommand.h"
 
-typedef void (*CommandCallback)(StructureCommand*);
+typedef void (*CommandCallback)(LosantCommand*);
 
-class StructureDevice {
+class LosantDevice {
 	public:
-		StructureDevice(const char* id);
+		LosantDevice(const char* id);
 		void connect(Client& client, const char* key, const char* secret);
 		void connectSecure(Client &client, const char* key, const char* secret);
 		void disconnect();
@@ -31,4 +31,4 @@ class StructureDevice {
 			const char* secret, const char *brokerUrl, int brokerPort);
 };
 
-#endif /* STRUCTURE_DEVICE_H_ */
+#endif /* LOSANT_DEVICE_H_ */

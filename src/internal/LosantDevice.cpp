@@ -1,10 +1,10 @@
-#include "StructureDevice.h"
+#include "LosantDevice.h"
 
-CommandCallback StructureDevice::commandCallback = NULL;
+CommandCallback LosantDevice::commandCallback = NULL;
 
 void commandReceived(char* topic, byte* payload, unsigned int length) {
 
-  StructureCommand command;
+  LosantCommand command;
   DynamicJsonBuffer jsonBuffer;
   JsonObject& root = jsonBuffer.parseObject((char*)payload);
 
@@ -13,37 +13,37 @@ void commandReceived(char* topic, byte* payload, unsigned int length) {
     command.time = root["$time"];
     command.payload = &(root["payload"].asObject());
 
-    StructureDevice::commandCallback(&command);
+    LosantDevice::commandCallback(&command);
   }
 }
 
-StructureDevice::StructureDevice(const char* id) {
+LosantDevice::LosantDevice(const char* id) {
   this->id = id;
-  stateTopic = String(STRUCTURE_TOPIC_PREFIX);
+  stateTopic = String(LOSANT_TOPIC_PREFIX);
   stateTopic.concat(id);
-  stateTopic.concat(STRUCTURE_TOPIC_STATE);
-  commandTopic = String(STRUCTURE_TOPIC_PREFIX);
+  stateTopic.concat(LOSANT_TOPIC_STATE);
+  commandTopic = String(LOSANT_TOPIC_PREFIX);
   commandTopic.concat(id);
-  commandTopic.concat(STRUCTURE_TOPIC_COMMAND);
+  commandTopic.concat(LOSANT_TOPIC_COMMAND);
 }
 
-const char* StructureDevice::getId() {
+const char* LosantDevice::getId() {
   return id;
 }
 
-void StructureDevice::onCommand(CommandCallback callback) {
-  StructureDevice::commandCallback = callback;
+void LosantDevice::onCommand(CommandCallback callback) {
+  LosantDevice::commandCallback = callback;
 }
 
-void StructureDevice::connect(Client& client, const char* key, const char* secret) {
-  this->connect(client, key, secret, STRUCTURE_BROKER, STRUCTURE_PORT);
+void LosantDevice::connect(Client& client, const char* key, const char* secret) {
+  this->connect(client, key, secret, LOSANT_BROKER, LOSANT_PORT);
 }
 
-void StructureDevice::connectSecure(Client& client, const char* key, const char* secret) {
-  this->connect(client, key, secret, STRUCTURE_BROKER, STRUCTURE_PORT_SECURE);
+void LosantDevice::connectSecure(Client& client, const char* key, const char* secret) {
+  this->connect(client, key, secret, LOSANT_BROKER, LOSANT_PORT_SECURE);
 }
 
-void StructureDevice::connect(Client &client, const char* key, const char* secret, const char *brokerUrl, int brokerPort) {
+void LosantDevice::connect(Client &client, const char* key, const char* secret, const char *brokerUrl, int brokerPort) {
     mqttClient.setClient(client);
     mqttClient.setServer(brokerUrl, brokerPort);
     mqttClient.connect(id, key, secret);
@@ -54,19 +54,19 @@ void StructureDevice::connect(Client &client, const char* key, const char* secre
     mqttClient.subscribe(topicBuf);
 }
 
-void StructureDevice::disconnect() {
+void LosantDevice::disconnect() {
   mqttClient.disconnect();
 }
 
-boolean StructureDevice::connected() {
+boolean LosantDevice::connected() {
   return mqttClient.connected();
 }
 
-boolean StructureDevice::loop() {
+boolean LosantDevice::loop() {
   return mqttClient.loop();
 }
 
-void StructureDevice::sendState(JsonObject& state) {
+void LosantDevice::sendState(JsonObject& state) {
 
   // Create a wrapper object and add provided state to "data" property.
   StaticJsonBuffer<100> jsonBuffer;

@@ -1,10 +1,10 @@
-Structure Arduino SDK
+Losant Arduino SDK
 ============
 
-The Structure Arduino SDK provides a simple way for your Arduino-based things to connect and communicate with the [Structure IoT developer platform](https://getstructure.io).
+The Losant Arduino SDK provides a simple way for your Arduino-based things to connect and communicate with the [Losant IoT developer platform](https://losant.com).
 
 ## Installation
-The Structure Arduino SDK is distributed as an Arduino library. It can be installed in two ways:
+The Losant Arduino SDK is distributed as an Arduino library. It can be installed in two ways:
 
 1. Download a zip of this repository and include it into your Arduino Sketch. Select `Sketch -> Include Library -> Add .ZIP` library from the Arduino menu.
 
@@ -13,26 +13,26 @@ The Structure Arduino SDK is distributed as an Arduino library. It can be instal
 Once installed, using the library requires a single include directive.
 
 ```arduino
-#include <Structure.h>
+#include <Losant.h>
 ```
 
 ## Dependencies
 
-The Structure Arduino SDK depends on [ArduinoJson](https://github.com/bblanchon/ArduinoJson) and [PubSubClient](https://github.com/knolleary/pubsubclient). These libraries must be installed before using the Structure SDK. Please refer to their documentation for specific installation instructions.
+The Losant Arduino SDK depends on [ArduinoJson](https://github.com/bblanchon/ArduinoJson) and [PubSubClient](https://github.com/knolleary/pubsubclient). These libraries must be installed before using the Losant SDK. Please refer to their documentation for specific installation instructions.
 
 ## Example
 
-Below is a basic example of using the Structure Arduino SDK. For specific examples for various boards, please refer to the [`examples`](https://github.com/GetStructure/structure-sdk-arduino/tree/master/examples) folder.
+Below is a basic example of using the Losant Arduino SDK. For specific examples for various boards, please refer to the [`examples`](https://github.com/GetStructure/losant-sdk-arduino/tree/master/examples) folder.
 
 ```arduino
 #include <WiFi101.h>
-#include <Structure.h>
+#include <Losant.h>
 
 // WiFi credentials.
 const char* WIFI_SSID = "WIFI_SSID";
 const char* WIFI_PASS = "WIFI_PASS";
 
-// Structure credentials.
+// Losant credentials.
 const char* STRUCTURE_DEVICE_ID = "my-device-id";
 const char* STRUCTURE_ACCESS_KEY = "my-app-key";
 const char* STRUCTURE_ACCESS_SECRET = "my-app-secret";
@@ -44,7 +44,7 @@ bool ledState = false;
 
 WiFiSSLClient wifiClient;
 
-StructureDevice device(STRUCTURE_DEVICE_ID);
+LosantDevice device(STRUCTURE_DEVICE_ID);
 
 // Toggles and LED on or off.
 void toggle() {
@@ -53,8 +53,8 @@ void toggle() {
   digitalWrite(LED_PIN, ledState ? HIGH : LOW);
 }
 
-// Called whenever the device receives a command from the Structure platform.
-void handleCommand(StructureCommand *command) {
+// Called whenever the device receives a command from the Losant platform.
+void handleCommand(LosantCommand *command) {
   Serial.print("Command received: ");
   Serial.println(command->name);
 
@@ -72,7 +72,7 @@ void connect() {
     Serial.print(".");
   }
 
-  // Connect to Structure.
+  // Connect to Losant.
   device.connectSecure(wifiClient, STRUCTURE_ACCESS_KEY, STRUCTURE_ACCESS_SECRET);
 
   while(!device.connected()) {
@@ -87,7 +87,7 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
 
   // Register the command handler to be called when a command is received
-  // from the Structure platform.
+  // from the Losant platform.
   device.onCommand(&handleCommand);
 
   connect();
@@ -96,13 +96,13 @@ void setup() {
 void buttonPressed() {
   Serial.println("Button Pressed!");
 
-  // Structure uses a JSON protocol. Construct the simple state object.
+  // Losant uses a JSON protocol. Construct the simple state object.
   // { "button" : true }
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
   root["button"] = true;
 
-  // Send the state to Structure.
+  // Send the state to Losant.
   device.sendState(root);
 }
 
@@ -118,7 +118,7 @@ void loop() {
   }
 
   if(!device.connected()) {
-    Serial.println("Disconnected from Structure");
+    Serial.println("Disconnected from Losant");
     toReconnect = true;
   }
 
@@ -141,91 +141,91 @@ void loop() {
 }
 ```
 
-## Structure State and Commands
-State and commands are the main two communication constructs of the Structure platform. A state represents a current snapshot of the device at a moment in time. On typical IoT devices, attributes of a device's state typically correspond to individual sensors (e.g. "temperature", "light level", or "sound level"). States can be reported to Structure as often as needed.
+## Losant State and Commands
+State and commands are the main two communication constructs of the Losant platform. A state represents a current snapshot of the device at a moment in time. On typical IoT devices, attributes of a device's state typically correspond to individual sensors (e.g. "temperature", "light level", or "sound level"). States can be reported to Losant as often as needed.
 
 Commands allow you to control your device remotely. What commands a device supports is entirely up to the device's firmware. A command is comprised of a name and an optional payload. The name indicates what command the device should invoke (e.g. "start recording") and the payload provide parameters to the command (e.g. `{ "resolution": 1080 }`).
 
 ## API Documentation
-* [`StructureDevice`](#structuredevice)
-  * [`StructureDevice::StructureDevice()`](#structuredevice-structuredevice)
-  * [`StructureDevice::connect()`](#structuredevice-connect)
-  * [`StructureDevice::connectSecure()`](#structuredevice-connectsecure)
-  * [`StructureDevice::onCommand()`](#structuredevice-oncommand)
-  * [`StructureDevice::sendState()`](#structuredevice-sendstate)
-  * [`StructureDevice::loop()`](#structuredevice-loop)
+* [`LosantDevice`](#losantdevice)
+  * [`LosantDevice::LosantDevice()`](#losantdevice-losantdevice)
+  * [`LosantDevice::connect()`](#losantdevice-connect)
+  * [`LosantDevice::connectSecure()`](#losantdevice-connectsecure)
+  * [`LosantDevice::onCommand()`](#losantdevice-oncommand)
+  * [`LosantDevice::sendState()`](#losantdevice-sendstate)
+  * [`LosantDevice::loop()`](#losantdevice-loop)
 
-<a name="structuredevice"></a>
-## StructureDevice
-The StructureDevice class represents a single connection to the Structure platform. Use this class to report state information and subscribe to commands.
+<a name="losantdevice"></a>
+## LosantDevice
+The LosantDevice class represents a single connection to the Losant platform. Use this class to report state information and subscribe to commands.
 
-<a name="structuredevice-structuredevice"></a>
-### StructureDevice::StructureDevice(const char\* id)
-Structure device constructor. The only parameter is the device ID. A Structure device ID can be obtained by registering your device using the Structure dashboard.
+<a name="losantdevice-losantdevice"></a>
+### LosantDevice::LosantDevice(const char\* id)
+Losant device constructor. The only parameter is the device ID. A Losant device ID can be obtained by registering your device using the Losant dashboard.
 
 ```arduino
-StructureDevice device('my-device-id');
+LosantDevice device('my-device-id');
 ```
 
-<a name="structuredevice-connect"></a>
-### StructureDevice::connect(Client& client, const char\* key, const char\* secret)
-Creates an unsecured connection to the Structure platform.
+<a name="losantdevice-connect"></a>
+### LosantDevice::connect(Client& client, const char\* key, const char\* secret)
+Creates an unsecured connection to the Losant platform.
 
 ```arduino
 WiFiClient client;
 
 ...
 
-StructureDevice device('my-device-id');
+LosantDevice device('my-device-id');
 device.connect(client, 'my-access-key', 'my-access-secret');
 ```
 
-<a name="structuredevice-connectsecure"></a>
-### StructureDevice::connectSecure(Client& client, const char\* key, const char\* secret)
-Creates a TLS encrypted connection to the Structure platform.
+<a name="losantdevice-connectsecure"></a>
+### LosantDevice::connectSecure(Client& client, const char\* key, const char\* secret)
+Creates a TLS encrypted connection to the Losant platform.
 
 ```arduino
 WiFiSSLClient client;
 
 ...
 
-StructureDevice device('my-device-id');
+LosantDevice device('my-device-id');
 device.connectSecure(client, 'my-access-key', 'my-access-secret');
 ```
 
-<a name="structuredevice-oncommand"></a>
-### StructureDevice::onCommand(CommandCallback callback)
-Registers a function that will be called whenever a command is received from the Structure platform.
+<a name="losantdevice-oncommand"></a>
+### LosantDevice::onCommand(CommandCallback callback)
+Registers a function that will be called whenever a command is received from the Losant platform.
 
 ```arduino
-void handleCommand(StructureCommand *command) {
+void handleCommand(LosantCommand *command) {
   Serial.print("Command received: ");
   Serial.println(command->name);
   Serial.println(command->time);
   JsonObject& payload = command->payload;
 }
 
-StructureDevice device('my-device-id');
+LosantDevice device('my-device-id');
 device.connectSecure(client, 'my-access-key', 'my-access-secret');
 device.onCommand(&handleCommand);
 ```
 
-The command callback function is passed a `StructureCommand` object with details about the command. These include `name`, `time`, and `payload`. `name` is a string containing the command's name. `time` is the UTC ISO string of the date and time when the command was received by the Structure platform. `payload` is a JsonObject with whatever arguments was passed to the command when it was sent.
+The command callback function is passed a `LosantCommand` object with details about the command. These include `name`, `time`, and `payload`. `name` is a string containing the command's name. `time` is the UTC ISO string of the date and time when the command was received by the Losant platform. `payload` is a JsonObject with whatever arguments was passed to the command when it was sent.
 
-<a name="structuredevice-sendstate"></a>
-### StructureDevice::sendState(JsonObject& state)
-Sends a state update to Structure. The state of an object is defined as a simple Json object with keys and values. Refer to the [ArduinoJson](https://github.com/bblanchon/ArduinoJson) library for detailed documentation.
+<a name="losantdevice-sendstate"></a>
+### LosantDevice::sendState(JsonObject& state)
+Sends a state update to Losant. The state of an object is defined as a simple Json object with keys and values. Refer to the [ArduinoJson](https://github.com/bblanchon/ArduinoJson) library for detailed documentation.
 
 ```arduino
 StaticJsonBuffer<100> jsonBuffer;
 JsonObject& state = jsonBuffer.createObject();
 state["temperature"] = 72;
 
-// Send the state to Structure.
+// Send the state to Losant.
 device.sendState(state);
 ```
-<a name="structuredevice-loop"></a>
-### StructureDevice::loop()
+<a name="losantdevice-loop"></a>
+### LosantDevice::loop()
 Loops the underlying Client to perform any required MQTT communication. Must be called periodically, no less than once every few seconds.
 
 ```arduino
