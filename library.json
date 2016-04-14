@@ -8,6 +8,18 @@
     "url": "https://github.com/Losant/losant-sdk-arduino.git"
   },
   "version": "1.0.0",
+  "dependencies":
+  [
+    {
+      "name": "Json",
+      "authors": "Benoit Blanchon",
+      "frameworks": "arduino"
+    },
+    {
+      "name": "PubSubClient",
+      "frameworks": "arduino"
+    }
+  ],  
   "frameworks": "arduino",
   "platforms": "*"
 }
