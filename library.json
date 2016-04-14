@@ -1,0 +1,13 @@
+{
+  "name": "Losant",
+  "keywords": "communication, wifi, wi-fi, http, iot",
+  "description": "Arduino SDK for connecting embedded devices to the Losant IoT developer platform",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/Losant/losant-sdk-arduino.git"
+  },
+  "version": "1.0.0",
+  "frameworks": "arduino",
+  "platforms": "*"
+}
