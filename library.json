@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/Losant/losant-sdk-arduino.git"
   },
-  "version": "1.0.0",
+  "version": "1.1.0",
   "dependencies":
   [
     {
