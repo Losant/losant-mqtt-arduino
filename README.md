@@ -22,7 +22,7 @@ The Losant Arduino SDK depends on [ArduinoJson](https://github.com/bblanchon/Ard
 
 ## Example
 
-Below is a basic example of using the Losant Arduino SDK. For specific examples for various boards, please refer to the [`examples`](https://github.com/GetStructure/losant-sdk-arduino/tree/master/examples) folder.
+Below is a basic example of using the Losant Arduino SDK. For specific examples for various boards, please refer to the [`examples`](https://github.com/Losant/losant-sdk-arduino/tree/master/examples) folder.
 
 ```arduino
 #include <WiFi101.h>
