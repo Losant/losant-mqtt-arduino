@@ -202,7 +202,10 @@ void handleCommand(LosantCommand *command) {
   Serial.print("Command received: ");
   Serial.println(command->name);
   Serial.println(command->time);
-  JsonObject& payload = command->payload;
+  
+  // { "foo" : 10 }
+  JsonObject& payload = *command->payload;
+  long bar = payload["foo"];
 }
 
 LosantDevice device('my-device-id');
