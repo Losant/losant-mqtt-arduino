@@ -13,12 +13,14 @@ typedef void (*CommandCallback)(LosantCommand*);
 class LosantDevice {
 	public:
 		LosantDevice(const char* id);
+		LosantDevice();
 		void connect(Client& client, const char* key, const char* secret);
 		void connectSecure(Client &client, const char* key, const char* secret);
 		void disconnect();
 		boolean loop();
 		void sendState(JsonObject& state);
 		void onCommand(CommandCallback);
+		void setId(const char* id);
 		const char* getId();
 		boolean connected();
 		String stateTopic;
@@ -27,6 +29,7 @@ class LosantDevice {
 		PubSubClient mqttClient;
 	private:
 		const char* id;
+		void setTopics();
 		void connect(Client &client, const char* key,
 			const char* secret, const char *brokerUrl, int brokerPort);
 };

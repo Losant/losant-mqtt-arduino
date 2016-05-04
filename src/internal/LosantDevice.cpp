@@ -17,14 +17,27 @@ void commandReceived(char* topic, byte* payload, unsigned int length) {
   }
 }
 
+LosantDevice::LosantDevice() {
+  this->id = NULL;
+}
+
 LosantDevice::LosantDevice(const char* id) {
   this->id = id;
-  stateTopic = String(LOSANT_TOPIC_PREFIX);
-  stateTopic.concat(id);
-  stateTopic.concat(LOSANT_TOPIC_STATE);
-  commandTopic = String(LOSANT_TOPIC_PREFIX);
-  commandTopic.concat(id);
-  commandTopic.concat(LOSANT_TOPIC_COMMAND);
+  this->setTopics();
+}
+
+void LosantDevice::setId(const char* id) {
+  this->id = id;
+  this->setTopics();
+}
+
+void LosantDevice::setTopics() {
+  this->stateTopic = String(LOSANT_TOPIC_PREFIX);
+  this->stateTopic.concat(this->id);
+  this->stateTopic.concat(LOSANT_TOPIC_STATE);
+  this->commandTopic = String(LOSANT_TOPIC_PREFIX);
+  this->commandTopic.concat(this->id);
+  this->commandTopic.concat(LOSANT_TOPIC_COMMAND);
 }
 
 const char* LosantDevice::getId() {
@@ -44,14 +57,19 @@ void LosantDevice::connectSecure(Client& client, const char* key, const char* se
 }
 
 void LosantDevice::connect(Client &client, const char* key, const char* secret, const char *brokerUrl, int brokerPort) {
-    mqttClient.setClient(client);
-    mqttClient.setServer(brokerUrl, brokerPort);
-    mqttClient.connect(id, key, secret);
-    mqttClient.setCallback(commandReceived);
-    int topicLen = commandTopic.length() + 1;
-    char topicBuf[topicLen];
-    commandTopic.toCharArray(topicBuf, topicLen);
-    mqttClient.subscribe(topicBuf);
+
+  if(!this->id) {
+    return;
+  }
+
+  mqttClient.setClient(client);
+  mqttClient.setServer(brokerUrl, brokerPort);
+  mqttClient.connect(this->id, key, secret);
+  mqttClient.setCallback(commandReceived);
+  int topicLen = commandTopic.length() + 1;
+  char topicBuf[topicLen];
+  commandTopic.toCharArray(topicBuf, topicLen);
+  mqttClient.subscribe(topicBuf);
 }
 
 void LosantDevice::disconnect() {

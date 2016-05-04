@@ -149,6 +149,8 @@ Commands allow you to control your device remotely. What commands a device suppo
 ## API Documentation
 * [`LosantDevice`](#losantdevice)
   * [`LosantDevice::LosantDevice()`](#losantdevice-losantdevice)
+  * [`LosantDevice::getId()`](#losantdevice-getId)
+  * [`LosantDevice::setId()`](#losantdevice-setId)
   * [`LosantDevice::connect()`](#losantdevice-connect)
   * [`LosantDevice::connectSecure()`](#losantdevice-connectsecure)
   * [`LosantDevice::onCommand()`](#losantdevice-oncommand)
@@ -165,6 +167,36 @@ Losant device constructor. The only parameter is the device ID. A Losant device 
 
 ```arduino
 LosantDevice device('my-device-id');
+```
+
+### LosantDevice::LosantDevice()
+Losant device constructor that does not require a device ID. The ID can be set at a later time using [setId()](#losantdevice-setId) The ID must be setting before [connect()](#losantdevice-connect) can be called.
+
+```arduino
+LosantDevice device;
+```
+
+<a name="losantdevice-getId"></a>
+### LosantDevice.getId()
+Gets the device ID that was set through the constructor or [setId()](#losantdevice-setId) call.
+
+```arduino
+LosantDevice device('my-device-id');
+const *char deviceId = device.getId();
+```
+
+<a name="losantdevice-setId"></a>
+### LosantDevice.setId()
+Sets the device ID. Typically called if the ID was not passed through the constructor.
+
+```arduino
+LosantDevice device;
+device.setId('my-device-id');
+```
+
+```arduino
+LosantDevice device('my-device-id');
+const *char deviceId = device.getId();
 ```
 
 <a name="losantdevice-connect"></a>
@@ -202,7 +234,7 @@ void handleCommand(LosantCommand *command) {
   Serial.print("Command received: ");
   Serial.println(command->name);
   Serial.println(command->time);
-  
+
   // { "foo" : 10 }
   JsonObject& payload = *command->payload;
   long bar = payload["foo"];
