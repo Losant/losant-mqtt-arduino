@@ -334,3 +334,11 @@ be called periodically, no less than once every few seconds.
 ```arduino
 device.loop();
 ```
+
+<br/>
+
+*****
+
+Copyright (c) 2016 Losant IoT, Inc
+
+<https://www.losant.com>
