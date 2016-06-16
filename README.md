@@ -1,10 +1,9 @@
-Losant Arduino SDK
-============
+# Losant Arduino MQTT Client
 
-The Losant Arduino SDK provides a simple way for your Arduino-based things to connect and communicate with the [Losant IoT developer platform](https://losant.com).
+The Losant Arduino MQTT client provides a simple way for your Arduino-based things to connect and communicate with the [Losant IoT developer platform](https://losant.com).
 
 ## Installation
-The Losant Arduino SDK is distributed as an Arduino library. It can be installed in two ways:
+The Losant Arduino MQTT client is distributed as an Arduino library. It can be installed in two ways:
 
 1. Download a zip of this repository and include it into your Arduino Sketch. Select `Sketch -> Include Library -> Add .ZIP` library from the Arduino menu.
 
@@ -18,11 +17,11 @@ Once installed, using the library requires a single include directive.
 
 ## Dependencies
 
-The Losant Arduino SDK depends on [ArduinoJson](https://github.com/bblanchon/ArduinoJson) and [PubSubClient](https://github.com/knolleary/pubsubclient). These libraries must be installed before using the Losant SDK. Please refer to their documentation for specific installation instructions.
+The Losant Arduino MQTT client depends on [ArduinoJson](https://github.com/bblanchon/ArduinoJson) and [PubSubClient](https://github.com/knolleary/pubsubclient). These libraries must be installed before using the Losant MQTT client. Please refer to their documentation for specific installation instructions.
 
 ## Example
 
-Below is a basic example of using the Losant Arduino SDK. For specific examples for various boards, please refer to the [`examples`](https://github.com/Losant/losant-sdk-arduino/tree/master/examples) folder.
+Below is a basic example of using the Losant Arduino MQTT client. For specific examples for various boards, please refer to the [`examples`](https://github.com/Losant/losant-mqtt-arduino/tree/master/examples) folder.
 
 ```arduino
 #include <WiFi101.h>
