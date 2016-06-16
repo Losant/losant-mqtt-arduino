@@ -39,7 +39,13 @@ Once installed, using the library requires a single include directive.
 
 ## Dependencies
 
-The Losant Arduino MQTT client depends on [ArduinoJson](https://github.com/bblanchon/ArduinoJson) and [PubSubClient](https://github.com/knolleary/pubsubclient). These libraries must be installed before using the Losant MQTT client. Please refer to their documentation for specific installation instructions.
+The Losant Arduino MQTT client depends on
+[ArduinoJson](https://github.com/bblanchon/ArduinoJson)
+and [PubSubClient](https://github.com/knolleary/pubsubclient). These libraries
+must be installed before using the Losant MQTT client.  When using Platform.io,
+these dependencies are installed automatically, but when using the Arduino IDE
+they must be installed manually.  Please refer to their documentation for
+specific installation instructions.
 
 ## Example
 
