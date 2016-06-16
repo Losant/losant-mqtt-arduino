@@ -1,13 +1,35 @@
 # Losant Arduino MQTT Client
 
-The Losant Arduino MQTT client provides a simple way for your Arduino-based things to connect and communicate with the [Losant IoT developer platform](https://losant.com).
+The Losant Arduino MQTT client provides a simple way for your Arduino-based
+things to connect and communicate with
+the [Losant IoT developer platform](https://www.losant.com).
 
-## Installation
-The Losant Arduino MQTT client is distributed as an Arduino library. It can be installed in two ways:
+## Installation for Platform.io
 
-1. Download a zip of this repository and include it into your Arduino Sketch. Select `Sketch -> Include Library -> Add .ZIP` library from the Arduino menu.
+The latest stable version is available in Platform.io and can be installed using
 
-2. Clone the contents of the repository into Arduino's library folder on your system. This location changes based on OS, but on Mac it's typically at `Documents / Arduino / libraries`.
+```bash
+platformio lib install 277
+```
+
+Once installed, using the library in the Platform.io IDE requires
+a single include directive:
+
+```arduino
+#include <Losant.h>
+```
+
+## Installation for the Arduino IDE
+
+The Losant Arduino MQTT client is distributed as an Arduino library.
+It can be installed in two ways:
+
+1.  Download a zip of this repository and include it into your Arduino Sketch.
+Select `Sketch -> Include Library -> Add .ZIP` library from the Arduino menu.
+
+2.  Clone the contents of the repository into Arduino's library folder on your
+system. This location changes based on OS, but on Mac it's typically at
+`Documents / Arduino / libraries`.
 
 Once installed, using the library requires a single include directive.
 
@@ -21,7 +43,9 @@ The Losant Arduino MQTT client depends on [ArduinoJson](https://github.com/bblan
 
 ## Example
 
-Below is a basic example of using the Losant Arduino MQTT client. For specific examples for various boards, please refer to the [`examples`](https://github.com/Losant/losant-mqtt-arduino/tree/master/examples) folder.
+Below is a basic example of using the Losant Arduino MQTT client. For specific
+examples for various boards, please refer to the [`examples`](https://github.com/Losant/losant-mqtt-arduino/tree/master/examples)
+folder.
 
 ```arduino
 #include <WiFi101.h>
@@ -141,43 +165,66 @@ void loop() {
 ```
 
 ## Losant State and Commands
-State and commands are the main two communication constructs of the Losant platform. A state represents a current snapshot of the device at a moment in time. On typical IoT devices, attributes of a device's state typically correspond to individual sensors (e.g. "temperature", "light level", or "sound level"). States can be reported to Losant as often as needed.
 
-Commands allow you to control your device remotely. What commands a device supports is entirely up to the device's firmware. A command is comprised of a name and an optional payload. The name indicates what command the device should invoke (e.g. "start recording") and the payload provide parameters to the command (e.g. `{ "resolution": 1080 }`).
+State and commands are the main two communication constructs of the Losant
+platform. A state represents a current snapshot of the device at a moment in
+time. On typical IoT devices, attributes of a device's state typically
+correspond to individual sensors (e.g. "temperature", "light level", or
+"sound level"). States can be reported to Losant as often as needed.
+
+Commands allow you to control your device remotely. What commands a device
+supports is entirely up to the device's firmware. A command is comprised of
+a name and an optional payload. The name indicates what command the device
+should invoke (e.g. "start recording") and the payload provide parameters
+to the command (e.g. `{ "resolution": 1080 }`).
 
 ## API Documentation
-* [`LosantDevice`](#losantdevice)
-  * [`LosantDevice::LosantDevice()`](#losantdevice-losantdevice)
-  * [`LosantDevice::getId()`](#losantdevice-getId)
-  * [`LosantDevice::setId()`](#losantdevice-setId)
-  * [`LosantDevice::connect()`](#losantdevice-connect)
-  * [`LosantDevice::connectSecure()`](#losantdevice-connectsecure)
-  * [`LosantDevice::onCommand()`](#losantdevice-oncommand)
-  * [`LosantDevice::sendState()`](#losantdevice-sendstate)
-  * [`LosantDevice::loop()`](#losantdevice-loop)
+
+*   [`LosantDevice`](#losantdevice)
+
+    *   [`LosantDevice::LosantDevice()`](#losantdevice-losantdevice)
+    *   [`LosantDevice::getId()`](#losantdevice-getId)
+    *   [`LosantDevice::setId()`](#losantdevice-setId)
+    *   [`LosantDevice::connect()`](#losantdevice-connect)
+    *   [`LosantDevice::connectSecure()`](#losantdevice-connectsecure)
+    *   [`LosantDevice::onCommand()`](#losantdevice-oncommand)
+    *   [`LosantDevice::sendState()`](#losantdevice-sendstate)
+    *   [`LosantDevice::loop()`](#losantdevice-loop)
 
 <a name="losantdevice"></a>
+
 ## LosantDevice
-The LosantDevice class represents a single connection to the Losant platform. Use this class to report state information and subscribe to commands.
+
+The LosantDevice class represents a single connection to the Losant platform.
+Use this class to report state information and subscribe to commands.
 
 <a name="losantdevice-losantdevice"></a>
+
 ### LosantDevice::LosantDevice(const char\* id)
-Losant device constructor. The only parameter is the device ID. A Losant device ID can be obtained by registering your device using the Losant dashboard.
+
+Losant device constructor. The only parameter is the device ID. A Losant device
+ID can be obtained by registering your device using the Losant dashboard.
 
 ```arduino
 LosantDevice device('my-device-id');
 ```
 
 ### LosantDevice::LosantDevice()
-Losant device constructor that does not require a device ID. The ID can be set at a later time using [setId()](#losantdevice-setId) The ID must be setting before [connect()](#losantdevice-connect) can be called.
+
+Losant device constructor that does not require a device ID. The ID can
+be set at a later time using [setId()](#losantdevice-setId) The ID must be
+set before [connect()](#losantdevice-connect) can be called.
 
 ```arduino
 LosantDevice device;
 ```
 
 <a name="losantdevice-getId"></a>
+
 ### LosantDevice.getId()
-Gets the device ID that was set through the constructor or [setId()](#losantdevice-setId) call.
+
+Gets the device ID that was set through the constructor or
+[setId()](#losantdevice-setId) call.
 
 ```arduino
 LosantDevice device('my-device-id');
@@ -185,8 +232,11 @@ const *char deviceId = device.getId();
 ```
 
 <a name="losantdevice-setId"></a>
+
 ### LosantDevice.setId()
-Sets the device ID. Typically called if the ID was not passed through the constructor.
+
+Sets the device ID. Typically called if the ID was not passed through
+the constructor.
 
 ```arduino
 LosantDevice device;
@@ -199,7 +249,9 @@ const *char deviceId = device.getId();
 ```
 
 <a name="losantdevice-connect"></a>
+
 ### LosantDevice::connect(Client& client, const char\* key, const char\* secret)
+
 Creates an unsecured connection to the Losant platform.
 
 ```arduino
@@ -212,7 +264,9 @@ device.connect(client, 'my-access-key', 'my-access-secret');
 ```
 
 <a name="losantdevice-connectsecure"></a>
+
 ### LosantDevice::connectSecure(Client& client, const char\* key, const char\* secret)
+
 Creates a TLS encrypted connection to the Losant platform.
 
 ```arduino
@@ -225,8 +279,11 @@ device.connectSecure(client, 'my-access-key', 'my-access-secret');
 ```
 
 <a name="losantdevice-oncommand"></a>
+
 ### LosantDevice::onCommand(CommandCallback callback)
-Registers a function that will be called whenever a command is received from the Losant platform.
+
+Registers a function that will be called whenever a command is received
+from the Losant platform.
 
 ```arduino
 void handleCommand(LosantCommand *command) {
@@ -244,11 +301,19 @@ device.connectSecure(client, 'my-access-key', 'my-access-secret');
 device.onCommand(&handleCommand);
 ```
 
-The command callback function is passed a `LosantCommand` object with details about the command. These include `name`, `time`, and `payload`. `name` is a string containing the command's name. `time` is the UTC ISO string of the date and time when the command was received by the Losant platform. `payload` is a JsonObject with whatever arguments was passed to the command when it was sent.
+The command callback function is passed a `LosantCommand` object with details
+about the command. These include `name`, `time`, and `payload`. `name` is a
+string containing the command's name. `time` is the UTC ISO string of the date
+and time when the command was received by the Losant platform. `payload` is a
+JsonObject with whatever arguments was passed to the command when it was sent.
 
 <a name="losantdevice-sendstate"></a>
+
 ### LosantDevice::sendState(JsonObject& state)
-Sends a state update to Losant. The state of an object is defined as a simple Json object with keys and values. Refer to the [ArduinoJson](https://github.com/bblanchon/ArduinoJson) library for detailed documentation.
+
+Sends a state update to Losant. The state of an object is defined as a simple
+Json object with keys and values. Refer to the [ArduinoJson](https://github.com/bblanchon/ArduinoJson)
+library for detailed documentation.
 
 ```arduino
 StaticJsonBuffer<100> jsonBuffer;
@@ -258,9 +323,13 @@ state["temperature"] = 72;
 // Send the state to Losant.
 device.sendState(state);
 ```
+
 <a name="losantdevice-loop"></a>
+
 ### LosantDevice::loop()
-Loops the underlying Client to perform any required MQTT communication. Must be called periodically, no less than once every few seconds.
+
+Loops the underlying Client to perform any required MQTT communication. Must
+be called periodically, no less than once every few seconds.
 
 ```arduino
 device.loop();
