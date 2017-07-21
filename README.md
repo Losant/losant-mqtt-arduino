@@ -4,7 +4,7 @@ The Losant Arduino MQTT client provides a simple way for your Arduino-based
 things to connect and communicate with
 the [Losant IoT developer platform](https://www.losant.com).
 
-## Installation for [PlatformIO](http://platformio.org/lib/show/277/Losant/installation)
+## Installation for [PlatformIO](http://platformio.org/lib/show/277/losant-mqtt-arduino/installation)
 
 The latest stable version is available in PlatformIO and can be installed adding dependency (`lib_deps`) to your project configuration file `platformio.ini`
 
@@ -13,7 +13,7 @@ The latest stable version is available in PlatformIO and can be installed adding
 platform = ...
 board = ...
 framework = arduino
-lib_deps = Losant
+lib_deps = losant-mqtt-arduino
 ```
 
 Using [PlatformIO IDE](http://platformio.org/platformio-ide) requires a single include directive:
