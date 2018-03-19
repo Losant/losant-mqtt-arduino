@@ -78,7 +78,7 @@ void connect() {
   device.connectSecure(wifiClient, LOSANT_ACCESS_KEY, LOSANT_ACCESS_SECRET);
 
   // For an unsecure connection.
-  // device.connect(wifiClient, ACCESS_KEY, ACCESS_SECRET);
+  // device.connect(wifiClient, LOSANT_ACCESS_KEY, LOSANT_ACCESS_SECRET);
 
   while(!device.connected()) {
     delay(500);
