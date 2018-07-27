@@ -31,7 +31,7 @@ It can be installed in two ways:
 Select `Sketch -> Include Library -> Add .ZIP` library from the Arduino menu.
 
 2.  Clone the contents of the repository into Arduino's library folder on your
-system. This location changes based on OS, but on Mac it's typically at
+system. This location changes based on OS, but on Mac and Windows it's typically at
 `Documents / Arduino / libraries`.
 
 Once installed, using the library requires a single include directive.
