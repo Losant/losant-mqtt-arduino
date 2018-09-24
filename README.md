@@ -2,7 +2,7 @@
 
 The Losant Arduino MQTT client provides a simple way for your Arduino-based
 things to connect and communicate with
-the [Losant IoT developer platform](https://www.losant.com).
+the [Losant Enterprise IoT Platform](https://www.losant.com).
 
 ## Installation for [PlatformIO](http://platformio.org/lib/show/277/losant-mqtt-arduino/installation)
 
@@ -18,7 +18,7 @@ lib_deps = losant-mqtt-arduino
 
 Using [PlatformIO IDE](http://platformio.org/platformio-ide) requires a single include directive:
 
-```arduino
+```C
 #include <Losant.h>
 ```
 
@@ -27,16 +27,12 @@ Using [PlatformIO IDE](http://platformio.org/platformio-ide) requires a single i
 The Losant Arduino MQTT client is distributed as an Arduino library.
 It can be installed in two ways:
 
-1.  Download a zip of this repository and include it into your Arduino Sketch.
-Select `Sketch -> Include Library -> Add .ZIP` library from the Arduino menu.
-
-2.  Clone the contents of the repository into Arduino's library folder on your
-system. This location changes based on OS, but on Mac and Windows it's typically at
-`Documents / Arduino / libraries`.
+1. Download a zip of this repository and include it into your Arduino Sketch. Select `Sketch -> Include Library -> Add .ZIP` library from the Arduino menu.
+1. Clone the contents of the repository into Arduino's library folder on your system. This location changes based on OS, but on Mac and Windows it's typically at `Documents / Arduino / libraries`.
 
 Once installed, using the library requires a single include directive.
 
-```arduino
+```C
 #include <Losant.h>
 ```
 
@@ -50,13 +46,25 @@ these dependencies are installed automatically, but when using the Arduino IDE
 they must be installed manually.  Please refer to their documentation for
 specific installation instructions.
 
+### Important Considerations
+
+You’ll likely hit the default MQTT packet size limit defined in the underlying [PubSubClient](https://github.com/knolleary/pubsubclient) library. Unfortunately the packet is blocked before reaching any of your code, so it’s hard to debug. It simply looks like the command was never received. For example:
+
+`{ "foo" : "bar" }` works, whereas `{ "somethingLarger" : "with a longer value" }` doesn’t work. This is because the default packet size is 128, which provides enough room for the command meta info and a small payload. Fortunately, this is easy to fix:
+
+1. Open the `pubsubclient.h` file from the Arduino libraries folder. On a Mac, this will be located at `~/Documents/Arduino/libraries/pubsubclient/src/PubSubClient.h`.
+1. Edit the `MQTT_MAX_PACKET_SIZE` to something larger (Increasing it to 256 seems to work pretty well).
+1. Recompile and re-upload the firmware to the device.
+
+If you plan on sending even larger payloads, you can increase the value as needed. Just remember many boards don’t have a ton of memory, and the entire payload will have to fit.
+
 ## Example
 
 Below is a basic example of using the Losant Arduino MQTT client. For specific
 examples for various boards, please refer to the [`examples`](https://github.com/Losant/losant-mqtt-arduino/tree/master/examples)
 folder.
 
-```arduino
+```C
 #include <WiFi101.h>
 #include <Losant.h>
 
@@ -214,7 +222,7 @@ Use this class to report state information and subscribe to commands.
 Losant device constructor. The only parameter is the device ID. A Losant device
 ID can be obtained by registering your device using the Losant dashboard.
 
-```arduino
+```C
 LosantDevice device('my-device-id');
 ```
 
@@ -224,7 +232,7 @@ Losant device constructor that does not require a device ID. The ID can
 be set at a later time using [setId()](#losantdevice-setId) The ID must be
 set before [connect()](#losantdevice-connect) can be called.
 
-```arduino
+```C
 LosantDevice device;
 ```
 
@@ -235,7 +243,7 @@ LosantDevice device;
 Gets the device ID that was set through the constructor or
 [setId()](#losantdevice-setId) call.
 
-```arduino
+```C
 LosantDevice device('my-device-id');
 const *char deviceId = device.getId();
 ```
@@ -247,12 +255,12 @@ const *char deviceId = device.getId();
 Sets the device ID. Typically called if the ID was not passed through
 the constructor.
 
-```arduino
+```C
 LosantDevice device;
 device.setId('my-device-id');
 ```
 
-```arduino
+```C
 LosantDevice device('my-device-id');
 const *char deviceId = device.getId();
 ```
@@ -263,7 +271,7 @@ const *char deviceId = device.getId();
 
 Creates an unsecured connection to the Losant platform.
 
-```arduino
+```C
 WiFiClient client;
 
 ...
@@ -278,7 +286,7 @@ device.connect(client, 'my-access-key', 'my-access-secret');
 
 Creates a TLS encrypted connection to the Losant platform.
 
-```arduino
+```C
 WiFiSSLClient client;
 
 ...
@@ -294,7 +302,7 @@ device.connectSecure(client, 'my-access-key', 'my-access-secret');
 Registers a function that will be called whenever a command is received
 from the Losant platform.
 
-```arduino
+```C
 void handleCommand(LosantCommand *command) {
   Serial.print("Command received: ");
   Serial.println(command->name);
@@ -324,7 +332,7 @@ Sends a state update to Losant. The state of an object is defined as a simple
 Json object with keys and values. Refer to the [ArduinoJson](https://github.com/bblanchon/ArduinoJson)
 library for detailed documentation.
 
-```arduino
+```C
 StaticJsonBuffer<100> jsonBuffer;
 JsonObject& state = jsonBuffer.createObject();
 state["temperature"] = 72;
@@ -340,7 +348,7 @@ device.sendState(state);
 Loops the underlying Client to perform any required MQTT communication. Must
 be called periodically, no less than once every few seconds.
 
-```arduino
+```C
 device.loop();
 ```
 
