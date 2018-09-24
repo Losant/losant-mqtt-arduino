@@ -1,5 +1,5 @@
 {
-  "name": "Losant",
+  "name": "losant-mqtt-arduino",
   "keywords": "communication, wifi, wi-fi, http, iot",
   "description": "Arduino MQTT client for connecting embedded devices to the Losant IoT developer platform",
   "repository":
