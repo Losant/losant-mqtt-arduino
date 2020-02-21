@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/Losant/losant-mqtt-arduino.git"
   },
-  "version": "1.3.0",
+  "version": "1.4.0",
   "dependencies":
   [
     {
@@ -16,7 +16,8 @@
       "frameworks": "arduino"
     },
     {
-      "name": "PubSubClient",
+      "name": "MQTT",
+      "authors": "Joel Gahwiler",
       "frameworks": "arduino"
     }
   ],

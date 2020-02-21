@@ -40,7 +40,7 @@ Once installed, using the library requires a single include directive.
 
 The Losant Arduino MQTT client depends on
 [ArduinoJson](https://github.com/bblanchon/ArduinoJson)
-and [PubSubClient](https://github.com/knolleary/pubsubclient). These libraries
+and [MQTT Client](https://github.com/256dpi/arduino-mqtt). These libraries
 must be installed before using the Losant MQTT client.  When using Platform.io,
 these dependencies are installed automatically, but when using the Arduino IDE
 they must be installed manually.  Please refer to their documentation for
@@ -48,15 +48,16 @@ specific installation instructions.
 
 ### Important Considerations
 
-You’ll likely hit the default MQTT packet size limit defined in the underlying [PubSubClient](https://github.com/knolleary/pubsubclient) library. Unfortunately the packet is blocked before reaching any of your code, so it’s hard to debug. It simply looks like the command was never received. For example:
+You’ll possibly hit the default MQTT packet size limit defined in the Losant Arduino MQTT Client library. Unfortunately the packet is blocked before reaching any of your code, so it’s hard to debug. It simply looks like the command was never received. For example:
 
-`{ "foo" : "bar" }` works, whereas `{ "somethingLarger" : "with a longer value" }` doesn’t work. This is because the default packet size is 128, which provides enough room for the command meta info and a small payload. Fortunately, this is easy to fix:
+`{ "foo" : "bar" }` works, whereas `{ "somethingLarger" : "with a longer value" }` doesn’t work. This is because the default packet size is 256, which provides enough room for the command meta info and a small payload. Fortunately, this is easy to fix:
 
-1. Open the `pubsubclient.h` file from the Arduino libraries folder. On a Mac, this will be located at `~/Documents/Arduino/libraries/pubsubclient/src/PubSubClient.h`.
-1. Edit the `MQTT_MAX_PACKET_SIZE` to something larger (Increasing it to 256 seems to work pretty well).
+1. Open the `LosantDevice.h` file from the Arduino libraries folder. On a Mac, this will be located at `~/Documents/Arduino/libraries/losant-mqtt-arduino/src/LosantDevice.h`.
+1. Edit the `MQTT_MAX_PACKET_SIZE` to something larger.
 1. Recompile and re-upload the firmware to the device.
 
 If you plan on sending even larger payloads, you can increase the value as needed. Just remember many boards don’t have a ton of memory, and the entire payload will have to fit.
+  
 
 ## Example
 
@@ -138,8 +139,8 @@ void buttonPressed() {
 
   // Losant uses a JSON protocol. Construct the simple state object.
   // { "button" : true }
-  StaticJsonBuffer<200> jsonBuffer;
-  JsonObject& root = jsonBuffer.createObject();
+  StaticJsonDocument<200> jsonBuffer;
+  JsonObject root = jsonBuffer.to<JsonObject>();
   root["button"] = true;
 
   // Send the state to Losant.

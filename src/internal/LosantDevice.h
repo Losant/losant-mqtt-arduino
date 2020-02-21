@@ -2,11 +2,15 @@
 #ifndef LOSANT_DEVICE_H_
 #define LOSANT_DEVICE_H_
 
-#include <PubSubClient.h>
 #include <ArduinoJson.h>
 #include "Client.h"
 #include "Losant.h"
 #include "LosantCommand.h"
+
+// MQTT_MAX_PACKET_SIZE : Maximum packet size
+#ifndef MQTT_MAX_PACKET_SIZE
+#define MQTT_MAX_PACKET_SIZE 256
+#endif
 
 typedef void (*CommandCallback)(LosantCommand*);
 
@@ -26,7 +30,6 @@ class LosantDevice {
 		String stateTopic;
 		String commandTopic;
 		static CommandCallback commandCallback;
-		PubSubClient mqttClient;
 	private:
 		const char* id;
 		void setTopics();

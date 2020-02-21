@@ -107,8 +107,8 @@ void buttonPressed() {
 
   // Losant uses a JSON protocol. Construct the simple state object.
   // { "button" : true }
-  StaticJsonBuffer<200> jsonBuffer;
-  JsonObject& root = jsonBuffer.createObject();
+  StaticJsonDocument<200> jsonBuffer;
+  JsonObject root = jsonBuffer.to<JsonObject>();
   root["button"] = true;
 
   // Send the state to Losant.
@@ -128,7 +128,6 @@ void loop() {
 
   if(!device.connected()) {
     Serial.println("Disconnected from Losant");
-    Serial.println(device.mqttClient.state());
     toReconnect = true;
   }
 

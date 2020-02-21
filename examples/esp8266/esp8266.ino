@@ -66,6 +66,11 @@ void connect() {
     Serial.print(".");
   }
 
+  // do not verify tls certificate
+  // check the following example for methods to verify the server:
+  // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/examples/BearSSL_Validation/BearSSL_Validation.ino
+  wifiClient.setInsecure();
+
   Serial.println("");
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
@@ -106,8 +111,8 @@ void buttonPressed() {
 
   // Losant uses a JSON protocol. Construct the simple state object.
   // { "button" : true }
-  StaticJsonBuffer<200> jsonBuffer;
-  JsonObject& root = jsonBuffer.createObject();
+  StaticJsonDocument<200> jsonBuffer;
+  JsonObject root = jsonBuffer.to<JsonObject>();
   root["button"] = true;
 
   // Send the state to Losant.
@@ -127,7 +132,6 @@ void loop() {
 
   if(!device.connected()) {
     Serial.println("Disconnected from Losant");
-    Serial.println(device.mqttClient.state());
     toReconnect = true;
   }
 
