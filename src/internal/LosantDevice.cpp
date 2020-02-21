@@ -98,7 +98,5 @@ void LosantDevice::sendState(JsonObject& state) {
   String stateStr;
   serializeJson(doc, stateStr);
 
-  Serial.println(stateStr);
-
   mqttClient.publish(this->stateTopic.c_str(), stateStr.c_str());
 }
