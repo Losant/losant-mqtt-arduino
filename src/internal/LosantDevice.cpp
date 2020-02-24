@@ -5,10 +5,9 @@ MQTTClient mqttClient(MQTT_MAX_PACKET_SIZE);
 
 CommandCallback LosantDevice::commandCallback = NULL;
 
-void commandReceived(char* topic, byte* payload, unsigned int length) {
+void commandReceived(String &topic, String &payload) {
 
   LosantCommand command;
-  DynamicJsonBuffer jsonBuffer;
   DynamicJsonDocument root(1024);
   DeserializationError error = deserializeJson(root, payload);
 

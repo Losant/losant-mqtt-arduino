@@ -50,13 +50,7 @@ specific installation instructions.
 
 You’ll possibly hit the default MQTT packet size limit defined in the Losant Arduino MQTT Client library. Unfortunately the packet is blocked before reaching any of your code, so it’s hard to debug. It simply looks like the command was never received. For example:
 
-`{ "foo" : "bar" }` works, whereas `{ "somethingLarger" : "with a longer value" }` doesn’t work. This is because the default packet size is 256, which provides enough room for the command meta info and a small payload. Fortunately, this is easy to fix:
-
-1. Open the `LosantDevice.h` file from the Arduino libraries folder. On a Mac, this will be located at `~/Documents/Arduino/libraries/losant-mqtt-arduino/src/LosantDevice.h`.
-1. Edit the `MQTT_MAX_PACKET_SIZE` to something larger.
-1. Recompile and re-upload the firmware to the device.
-
-If you plan on sending even larger payloads, you can increase the value as needed. Just remember many boards don’t have a ton of memory, and the entire payload will have to fit.
+`{ "foo" : "bar" }` works, whereas `{ "somethingLarger" : "with a longer value" }` doesn’t work. This is because the default packet size is 256, which provides enough room for the command meta info and a small payload. Fortunately, this is easily fixed by defining a larger value for `MQTT_MAX_PACKET_SIZE` in your Arduino code.
   
 
 ## Example
