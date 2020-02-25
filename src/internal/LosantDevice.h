@@ -2,6 +2,7 @@
 #ifndef LOSANT_DEVICE_H_
 #define LOSANT_DEVICE_H_
 
+#include <MQTT.h>
 #include <ArduinoJson.h>
 #include "Client.h"
 #include "Losant.h"
@@ -30,6 +31,7 @@ class LosantDevice {
 		String stateTopic;
 		String commandTopic;
 		static CommandCallback commandCallback;
+		MQTTClient mqttClient = MQTTClient(MQTT_MAX_PACKET_SIZE);
 	private:
 		const char* id;
 		void setTopics();

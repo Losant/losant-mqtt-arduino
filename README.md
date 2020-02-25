@@ -328,8 +328,8 @@ Json object with keys and values. Refer to the [ArduinoJson](https://github.com/
 library for detailed documentation.
 
 ```C
-StaticJsonBuffer<100> jsonBuffer;
-JsonObject& state = jsonBuffer.createObject();
+StaticJsonDocument<200> jsonBuffer;
+JsonObject state = jsonBuffer.to<JsonObject>();
 state["temperature"] = 72;
 
 // Send the state to Losant.

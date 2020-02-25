@@ -1,7 +1,4 @@
-#include <MQTT.h>
 #include "LosantDevice.h"
-
-MQTTClient mqttClient(MQTT_MAX_PACKET_SIZE);
 
 CommandCallback LosantDevice::commandCallback = NULL;
 
