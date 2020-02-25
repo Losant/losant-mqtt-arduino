@@ -66,7 +66,9 @@ void connect() {
     Serial.print(".");
   }
 
-  // do not verify tls certificate
+  // With setInsecure() ou can tell BearSSL not to check the
+  // certificate of the server.  In this mode it will accept ANY certificate,
+  // which is subject to man-in-the-middle (MITM) attacks.
   // check the following example for methods to verify the server:
   // https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/examples/BearSSL_Validation/BearSSL_Validation.ino
   wifiClient.setInsecure();
