@@ -351,6 +351,6 @@ device.loop();
 
 *****
 
-Copyright (c) 2016 Losant IoT, Inc
+Copyright (c) 2020 Losant IoT, Inc
 
 <https://www.losant.com>
