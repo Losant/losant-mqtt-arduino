@@ -2,16 +2,17 @@
 
 CommandCallback LosantDevice::commandCallback = NULL;
 
-void commandReceived(char* topic, byte* payload, unsigned int length) {
+void commandReceived(String &topic, String &payload) {
 
   LosantCommand command;
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject& root = jsonBuffer.parseObject((char*)payload);
+  DynamicJsonDocument root(1024);
+  DeserializationError error = deserializeJson(root, payload);
 
-  if(root.success()) {
+  if (!error) {
     command.name = root["name"];
     command.time = root["$time"];
-    command.payload = &(root["payload"].asObject());
+    JsonObject object = root["payload"].to<JsonObject>();
+    command.payload = &object;
 
     LosantDevice::commandCallback(&command);
   }
@@ -62,10 +63,9 @@ void LosantDevice::connect(Client &client, const char* key, const char* secret, 
     return;
   }
 
-  mqttClient.setClient(client);
-  mqttClient.setServer(brokerUrl, brokerPort);
+  mqttClient.begin(brokerUrl, brokerPort, client);
+  mqttClient.onMessage(commandReceived);
   mqttClient.connect(this->id, key, secret);
-  mqttClient.setCallback(commandReceived);
   int topicLen = commandTopic.length() + 1;
   char topicBuf[topicLen];
   commandTopic.toCharArray(topicBuf, topicLen);
@@ -87,13 +87,12 @@ boolean LosantDevice::loop() {
 void LosantDevice::sendState(JsonObject& state) {
 
   // Create a wrapper object and add provided state to "data" property.
-  StaticJsonBuffer<100> jsonBuffer;
-  JsonObject& root = jsonBuffer.createObject();
-  root["data"] = state;
+  StaticJsonDocument<256> doc;
+  doc["data"] = state;
 
   // Convert to string to send over mqtt.
   String stateStr;
-  root.printTo(stateStr);
+  serializeJson(doc, stateStr);
 
   mqttClient.publish(this->stateTopic.c_str(), stateStr.c_str());
 }

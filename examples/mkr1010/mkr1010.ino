@@ -1,5 +1,5 @@
 /**
- * Example that connects an Adafruit Feather Huzzah to the Losant
+ * Example that connects an Arduino MKR 1010 to the Losant
  * IoT platform. This example reports state to Losant whenever a button is
  * pressed. It also listens for the "toggle" command to turn the LED on and off.
  *
@@ -11,68 +11,29 @@
  * http://losant.com
  */
 
-#include <ESP8266WiFi.h>
-#include <WiFiClientSecure.h>
-#include <time.h>
+#include <WiFiNINA.h>
 #include <Losant.h>
 
 // WiFi credentials.
-const char* WIFI_SSID = "my-wifi-ssid";
-const char* WIFI_PASS = "my-wifi-pass";
+const char* WIFI_SSID = "ssid";
+const char* WIFI_PASS = "pass";
 
 // Losant credentials.
-const char* LOSANT_DEVICE_ID = "my-device-id";
-const char* LOSANT_ACCESS_KEY = "my-app-key";
-const char* LOSANT_ACCESS_SECRET = "my-app-secret";
+const char* LOSANT_DEVICE_ID = "LOSANT_DEVICE_ID";
+const char* LOSANT_ACCESS_KEY = "LOSANT_ACCESS_KEY";
+const char* LOSANT_ACCESS_SECRET = "LOSANT_ACCESS_SECRET";
 
 const int BUTTON_PIN = 14;
 const int LED_PIN = 12;
 
 bool ledState = false;
 
-// Cert taken from 
-// https://github.com/Losant/losant-mqtt-ruby/blob/master/lib/losant_mqtt/RootCA.crt
-static const char digicert[] PROGMEM = R"EOF(
------BEGIN CERTIFICATE-----
-MIIDrzCCApegAwIBAgIQCDvgVpBCRrGhdWrJWZHHSjANBgkqhkiG9w0BAQUFADBh
-MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3
-d3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBD
-QTAeFw0wNjExMTAwMDAwMDBaFw0zMTExMTAwMDAwMDBaMGExCzAJBgNVBAYTAlVT
-MRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5j
-b20xIDAeBgNVBAMTF0RpZ2lDZXJ0IEdsb2JhbCBSb290IENBMIIBIjANBgkqhkiG
-9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4jvhEXLeqKTTo1eqUKKPC3eQyaKl7hLOllsB
-CSDMAZOnTjC3U/dDxGkAV53ijSLdhwZAAIEJzs4bg7/fzTtxRuLWZscFs3YnFo97
-nh6Vfe63SKMI2tavegw5BmV/Sl0fvBf4q77uKNd0f3p4mVmFaG5cIzJLv07A6Fpt
-43C/dxC//AH2hdmoRBBYMql1GNXRor5H4idq9Joz+EkIYIvUX7Q6hL+hqkpMfT7P
-T19sdl6gSzeRntwi5m3OFBqOasv+zbMUZBfHWymeMr/y7vrTC0LUq7dBMtoM1O/4
-gdW7jVg/tRvoSSiicNoxBN33shbyTApOB6jtSj1etX+jkMOvJwIDAQABo2MwYTAO
-BgNVHQ8BAf8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUA95QNVbR
-TLtm8KPiGxvDl7I90VUwHwYDVR0jBBgwFoAUA95QNVbRTLtm8KPiGxvDl7I90VUw
-DQYJKoZIhvcNAQEFBQADggEBAMucN6pIExIK+t1EnE9SsPTfrgT1eXkIoyQY/Esr
-hMAtudXH/vTBH1jLuG2cenTnmCmrEbXjcKChzUyImZOMkXDiqw8cvpOp/2PV5Adg
-06O/nVsJ8dWO41P0jmP6P6fbtGbfYmbW0W5BjfIttep3Sp+dWOIrWcBAI+0tKIJF
-PnlUkiaY4IBIqDfv8NZ5YBberOgOzW6sRBc4L0na4UU+Krk2U886UAb3LujEV0ls
-YSEY1QSteDwsOoBrp+uvFRTp2InBuThs4pFsiv9kuXclVzDAGySj4dzp30d8tbQk
-CAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=
------END CERTIFICATE-----
-)EOF";
+WiFiSSLClient wifiClient;
 
-BearSSL::WiFiClientSecure wifiClient;
+// For an unsecure connection to Losant.
+// WiFiClient wifiClient;
 
 LosantDevice device(LOSANT_DEVICE_ID);
-
-// Set time via NTP, as required for x.509 validation
-void setClock() {
-  configTime(3 * 3600, 0, "pool.ntp.org", "time.nist.gov");
-
-  time_t now = time(nullptr);
-  while (now < 8 * 3600 * 2) {
-    delay(500);
-    now = time(nullptr);
-  }
-  struct tm timeinfo;
-  gmtime_r(&now, &timeinfo);
-}
 
 void toggle() {
   Serial.println("Toggling LED.");
@@ -105,12 +66,6 @@ void connect() {
     Serial.print(".");
   }
 
-  // Validating  the SSL for for a secure connection you must
-  // set trust anchor, as well as set the time.
-  BearSSL::X509List cert(digicert);
-  wifiClient.setTrustAnchors(&cert);
-  setClock();
-  
 
   Serial.println("");
   Serial.println("WiFi connected");
@@ -122,6 +77,9 @@ void connect() {
   Serial.print("Connecting to Losant...");
 
   device.connectSecure(wifiClient, LOSANT_ACCESS_KEY, LOSANT_ACCESS_SECRET);
+
+  // For an unsecure connection.
+  // device.connect(wifiClient, LOSANT_ACCESS_KEY, LOSANT_ACCESS_SECRET);
 
   while(!device.connected()) {
     delay(500);
