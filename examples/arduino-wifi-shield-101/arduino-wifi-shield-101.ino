@@ -48,7 +48,7 @@ void handleCommand(LosantCommand *command) {
   Serial.println(command->name);
 
   // Optional command payload. May not be present on all commands.
-  JsonObject payload = *command->payload;
+  // JsonObject payload = *command->payload;
 
   // Perform action specific to the command received.
   if(strcmp(command->name, "toggle") == 0) {
