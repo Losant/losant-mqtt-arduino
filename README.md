@@ -304,7 +304,7 @@ void handleCommand(LosantCommand *command) {
   Serial.println(command->time);
 
   // { "foo" : 10 }
-  JsonObject& payload = *command->payload;
+  JsonObject payload = *command->payload;
   long bar = payload["foo"];
 }
 

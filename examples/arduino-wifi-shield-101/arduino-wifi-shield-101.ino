@@ -48,13 +48,17 @@ void handleCommand(LosantCommand *command) {
   Serial.println(command->name);
 
   // Optional command payload. May not be present on all commands.
-  JsonObject payload = *command->payload;
+  // JsonObject payload = *command->payload;
 
   // Perform action specific to the command received.
   if(strcmp(command->name, "toggle") == 0) {
     toggle();
-    // Access values from payload
-    // change the key to the specific field in the payload
+    /**
+    * In Losant, including a payload along with your
+    * command is optional. This is an example of how
+    * to parse a JSON payload from Losant and print
+    * the value of a key called "temperature".
+    */
     // int temperature = payload["temperature"];
     // Serial.println(temperature);
   }
