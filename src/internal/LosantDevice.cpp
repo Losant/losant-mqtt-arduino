@@ -11,7 +11,7 @@ void commandReceived(String &topic, String &payload) {
   if (!error) {
     command.name = root["name"];
     command.time = root["$time"];
-    JsonObject object = root["payload"].to<JsonObject>();
+    JsonObject object = root["payload"];
     command.payload = &object;
 
     LosantDevice::commandCallback(&command);
