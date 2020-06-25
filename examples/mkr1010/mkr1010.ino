@@ -53,8 +53,9 @@ void handleCommand(LosantCommand *command) {
   if(strcmp(command->name, "toggle") == 0) {
     toggle();
     // Access values from payload
-    //change the key to the specific field in the payload
-    // Serial.println(payload["resolution"]);
+    // change the key to the specific field in the payload
+    // int temperature = payload["temperature"];
+    // Serial.println(temperature);
   }
 }
 
