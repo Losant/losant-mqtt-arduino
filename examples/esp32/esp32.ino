@@ -1,5 +1,5 @@
 /**
- * Example that connects an Adafruit Feather Huzzah to the Losant
+ * Example that connects an ESP32 based board to the Losant
  * IoT platform. This example reports state to Losant whenever a button is
  * pressed. It also listens for the "toggle" command to turn the LED on and off.
  *
