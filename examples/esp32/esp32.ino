@@ -93,8 +93,6 @@ void connect() {
   Serial.print("Connecting to ");
   Serial.println(WIFI_SSID);
 
-//  wifiClient.setInsecure();
-
   WiFi.begin(WIFI_SSID, WIFI_PASS);
   wifiClient.setCACert(rootCABuff);
 
