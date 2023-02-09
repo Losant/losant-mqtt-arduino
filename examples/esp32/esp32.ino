@@ -7,7 +7,7 @@
  * Button connected to pin 14.
  * LED connected to pin 12.
  *
- * Copyright (c) 2022 Losant. All rights reserved.
+ * Copyright (c) 2023 Losant. All rights reserved.
  * http://losant.com
  */
 
