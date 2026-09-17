@@ -230,6 +230,6 @@ device.loop();
 
 *****
 
-Copyright (c) 2023 Losant IoT, Inc
+Copyright (c) 2026 SUSE
 
 <https://www.losant.com>
